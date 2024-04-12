@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  server:
+    image: python:3.8-slim-buster
+    hostname: server
+    working_dir: /app
+    volumes:
+      - type: bind
+        target: /app
+        source: ./server
+    ports:
+      - "5000:5000"
+    command:
+      - /bin/sh
+      - -c 
+      - | 
+        pip3 install -r requirements.txt
+        python3 -m flask run --host=0.0.0.0
+  elasticsearch:
+    image: elasticsearch:8.8.1
+    hostname: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - es_place_data:/usr/share/elasticsearch/data
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+  web:
+    image: node:18-alpine
+    hostname: web
+    working_dir: /amazonsearch
+    volumes:
+      - type: bind
+        target: /amazonsearch
+        source: ./web
+    ports:
+      - 3000:3000
+    command:
+      - /bin/sh
+      - -c 
+      - |
+        npm install 
+        npm start
+networks: 
+  default:
+    name: external-example 
+    external: true   
+volumes:
+  es_place_data:
+    driver: local
