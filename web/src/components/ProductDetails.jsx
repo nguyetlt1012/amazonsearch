@@ -5,15 +5,16 @@ const ProductDetails = ({ item }) => {
   return (
     <div>
       <img
-        style={{ width: "100%", marginBottom: "5px" }}
-        src={item["Image Urls"].split("|")[0]}
+        style={{ width: "100%", marginBottom: "5px", height: "300px" }}
+        src={item.image_urls.split("|")[0]}
         alt="product-image"
       />
       <div className="name">
-        <Tag>{item.Category}</Tag>
-        <p style={{ fontSize: "16px", fontWeight: "bold" }}>
-          {item["Product Title"]}
+        <Tag>{item.category}</Tag>
+        <p style={{ fontSize: "16px", fontWeight: "bold", display: "-webkit-box", "-webkit-line-clamp": "2",  "-webkit-box-orient": "vertical", "overflow": "hidden" }}>
+          {item.title}
         </p>
+        <p style={{fontStyle: "italic"}}>{item.brand}</p>
       </div>
       <div className="rating">
         <ProductRatings
@@ -30,7 +31,7 @@ const ProductDetails = ({ item }) => {
         className="price"
         style={{ display: "flex", alignItems: "flex-end" }}
       >
-        <p style={{ fontWeight: "bold", marginRight: "5px" }}>${item.Price}</p>
+        <p style={{ fontWeight: "bold", marginRight: "5px" }}>${item.price}</p>
         {item.Offers !== "0%" && (
           <p
             style={{
@@ -38,7 +39,7 @@ const ProductDetails = ({ item }) => {
               textDecoration: "line-through",
             }}
           >
-            Typical: {item.Mrp}
+            Typical: {item.mrp}
           </p>
         )}
       </div>

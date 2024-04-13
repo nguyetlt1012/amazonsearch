@@ -17,7 +17,21 @@ export const getSearchResults = (filters, callback) => {
   const axios_config = axios.create({
     baseURL: 'http://localhost:5000',
   });
-  const url = `/search_by_title?query=${filters.query}&category=${filters.category}&sortBy=${filters.sortBy}`;
+  let params = "";
+  if(filters.query) {
+    params += `query=${filters.query}&`
+  }
+  if(filters.category) {
+    params += `category=${filters.category}&`
+  }
+  if(filters.sortBy) {
+    params += `sortBy=${filters.sortBy}&`
+  }
+  if(filters.page) {
+    params += `page=${filters.page}&`
+  }
+  params = params.slice(0, -1);
+  const url = `/search_by_title?${params}`;
   axios_config
     .get(url)
     .then((res) => {

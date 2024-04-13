@@ -1,26 +1,22 @@
 import { BarChart } from "@mui/x-charts/BarChart";
-import { Checkbox, List, Select } from "antd";
+import { Checkbox, List, Pagination, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { brands, colors, discounts, sort_by } from "../Config/MockedData";
 import mockedData from "../mockData.json";
-import { ProductDetails, ProductRatings } from "./";
+import { NavBar, ProductDetails, ProductRatings } from "./";
 import { getSearchResults } from "../utils/CallApi";
 
 const SearchResults = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [data, setData] = useState(mockedData);
-  const [pagination, setPagination] = useState({
-    pageSize: 20,
-    total: data.length,
-  });
+  const [data, setData] = useState([]);
   const [filters, setFilters] = useState({
     query: searchParams.get("searchTerm"),
     category: searchParams.get("category"),
-    sortBy: null,
+    sortBy: searchParams.get("sortBy"),
+    page:  searchParams.get("page") ?  searchParams.get("page"): 1,
   });
-  console.log(filters);
 
   const handleChange = (value) => {
     setFilters({
@@ -28,14 +24,20 @@ const SearchResults = () => {
       sortBy: value,
     });
   };
+  const handlePageChange = (current, pageSize) => {
+    setFilters({...filters, page: current})
+    navigate(`/?category=${filters.category ? filters.category : "All"}&searchTerm=${filters.query ? filters.query : ""}&page=${current}`)
+  }
 
   useEffect(() => {
     getSearchResults(filters, (res) => {
-      console.log(res);
+      setData(res)
     });
   }, [filters]);
+  console.log(filters)
   return (
     <div style={{ width: "100%" }}>
+      <NavBar filters={filters} setFilters={setFilters}/>
       <div
         className="sort-by"
         style={{
@@ -209,21 +211,27 @@ const SearchResults = () => {
           </div>
         </div>
         <div className="products" style={{ width: "78%" }}>
-          <List
-            grid={{
-              gutter: 25,
-              column: 4,
-            }}
-            pagination={pagination}
-            dataSource={data}
-            renderItem={(item, index) => {
-              return (
-                <List.Item key={index}>
-                  <ProductDetails item={item} />
-                </List.Item>
-              );
-            }}
-          />
+          {data.length > 0 &&
+            <div>
+              <List
+                grid={{
+                  gutter: 25,
+                  column: 4,
+                }}
+                dataSource={data}
+                renderItem={(item, index) => {
+                  return (
+                    <List.Item key={index}>
+                      <ProductDetails item={item.data} />
+                    </List.Item>
+                  );
+                }}
+              />
+              <div style={{width: "100%", display: "flex", justifyContent: "flex-end"}}>
+                <Pagination total={50} onChange={handlePageChange} pageSize={12} current={filters.page}/> 
+              </div>
+            </div>
+          }
         </div>
       </div>
     </div>

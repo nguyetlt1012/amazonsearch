@@ -30,22 +30,10 @@ export const colors = [
 export const sort_by = [
   {
     label: "Price: Low to High",
-    value: "0",
+    value: "Price: Low to High",
   },
   {
     label: "Price: High to Low",
-    value: "1",
-  },
-  {
-    label: "Avg. Customer Review",
-    value: "2",
-  },
-  {
-    label: "Newest Arrivals",
-    value: "3",
-  },
-  {
-    label: "Best Seller",
-    value: "4",
+    value: "Price: High to Low",
   },
 ];
