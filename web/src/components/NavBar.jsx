@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Search } from "./";
 
-const NavBar = () => {
+const NavBar = ({filters, setFilters}) => {
   const cart = useSelector((state) => state.cart.productsNumber);
   return (
     <header className="min-w-[1000px]">
       <div className="flex bg-amazonclone text-white h-[60px]">
-        {/* Left */}
         <div className="flex items-center m-4">
           <Link to={"/"}>
             <img
@@ -23,7 +22,7 @@ const NavBar = () => {
           </div>
         </div>
         <div className="flex grow relative items-center">
-          <Search />
+          <Search filters={filters} setFilters={setFilters}/>
         </div>
         <div className="flex items-center m-4">
           <div className="pr-4 pl-4">
