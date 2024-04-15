@@ -10,8 +10,9 @@ LIST_FIELDS = ['id', 'category', 'title', 'description', 'brand', 'mrp', 'price'
        'offers', 'stock_availibility', 'product_asin', 'image_urls']
 SIZE = 12
 logging.basicConfig(level=logging.INFO)
+
 def load_es():
-    model = SentenceTransformer('all-mpnet-base-v2')
+    model = SentenceTransformer('all-MiniLM-L6-v2')
     client = Elasticsearch(hosts=ES_HOST)
     return model, client
 
@@ -26,7 +27,7 @@ def hello_geek():
     return '<h1>Hello from Amazon Search</h2>'
 
 @app.route('/search', methods=['GET'])
-def search_title():
+def search():
     q = request.args.get('query', ' ')
     page = int(request.args.get('page', '1'))
     sort_by = request.args.get('sortBy', '')
