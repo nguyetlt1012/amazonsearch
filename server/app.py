@@ -10,7 +10,6 @@ LIST_FIELDS = ['id', 'category', 'title', 'description', 'brand', 'mrp', 'price'
        'offers', 'stock_availibility', 'product_asin', 'image_urls']
 SIZE = 12
 logging.basicConfig(level=logging.INFO)
-
 def load_es():
     model = SentenceTransformer('all-MiniLM-L6-v2')
     client = Elasticsearch(hosts=ES_HOST)
